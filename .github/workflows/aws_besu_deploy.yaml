@@ -26,13 +26,14 @@ name: Deploy an EKS cluster for corda
 on:
   push:
     branches:
-    - 'new_feature-2416'
-  # Manually trigger the workflow through the GitHub Actions UI
-  workflow_dispatch:
+    - 'new_feature-2416'   #name of the branch
+    # Ignore certain paths to avoid unnecessary triggering
     paths-ignore:
       - 'docs/**'
       - '**/charts/**'
       - '**/releases/**'
+  # Manually trigger the workflow through the GitHub Actions UI
+  workflow_dispatch:
 
 # Jobs to be executed
 jobs:
@@ -139,5 +140,5 @@ jobs:
           # Deploy the BEVEL's BESU DLT platform
           ansible-playbook platforms/shared/configuration/site.yaml \
             -i platforms/shared/inventory/ansible_provisioners \
-            -e @build/network-corda.yaml \
-            -e 'ansible_python_interpreter=/usr/bin/python3'
+            -e @build/network-corda.yaml \ 
+            -e 'ansible_python_interpreter=/usr/bin/python3' #-e "reset=true"
