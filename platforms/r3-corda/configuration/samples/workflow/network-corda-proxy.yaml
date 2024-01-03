@@ -48,7 +48,7 @@ network:
   # then these services should be listed in this section as well.
   organizations:
     - organization:
-      name: supplychain
+      name: supplycd
       country: UK
       state: London
       location: London
@@ -142,7 +142,7 @@ network:
 
     # Specification for the 2nd organization. Each organization maps to a VPC and a separate k8s cluster
     - organization:
-      name: manufacturer
+      name: manufaccd
       country: CH
       state: Zurich
       location: Zurich
@@ -197,7 +197,7 @@ network:
       services:
         peers:
         - peer:
-          name: manufacturer
+          name: manufaccd
           subject: "O=Manufacturer,OU=Manufacturer,L=47.38/8.54/Zurich,C=CH"  # This is the node identity. L=lat/long is mandatory for supplychain sample app
           type: node
           p2p:
