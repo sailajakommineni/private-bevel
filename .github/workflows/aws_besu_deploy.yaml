@@ -118,7 +118,7 @@ jobs:
           done
 
       # Deploy BEVEL's BESU Platform
-      - name: Deploy BEVEL's BESU Platform
+      - name: Deploy BEVEL's corda Platform
         run: |
           # Setup Kubernetes configuration
           mkdir -p /home/runner/.kube/build_config
@@ -137,8 +137,8 @@ jobs:
           pip install ansible jmespath jinja2-time
           ansible-galaxy collection install -r platforms/shared/configuration/requirements.yaml
           
-          # Deploy the BEVEL's BESU DLT platform
+          # Deploy the BEVEL's corda DLT platform
           ansible-playbook platforms/shared/configuration/site.yaml \
             -i platforms/shared/inventory/ansible_provisioners \
-            -e @build/network-corda.yaml \ -e "reset=true"
-            -e 'ansible_python_interpreter=/usr/bin/python3'
+            -e @build/network-corda.yaml \ 
+            -e 'ansible_python_interpreter=/usr/bin/python3' -e "reset=true"
