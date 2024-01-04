@@ -140,4 +140,4 @@ jobs:
           ansible-playbook platforms/shared/configuration/site.yaml \
             -i platforms/shared/inventory/ansible_provisioners \
             -e @build/network-corda.yaml \
-            -e 'ansible_python_interpreter=/usr/bin/python3' #-e "reset=true"
+            -e 'ansible_python_interpreter=/usr/bin/python3' -e "reset=true"
