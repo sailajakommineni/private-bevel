@@ -125,6 +125,7 @@ jobs:
           echo "${{ env.KUBECONFIG }}" | base64 --decode > /home/runner/.kube/build_config/kubeconfig
           export KUBECONFIG="/home/runner/.kube/build_config/kubeconfig"
 
+
           # Configure Git user settings
           git config --global user.email "${{ env.GIT_EMAIL_ADDR }}"
           git config --global user.name "${{ env.GIT_USER_NAME }}"
