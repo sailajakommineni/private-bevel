@@ -34,13 +34,11 @@ spec:
 
     k8s:
       kubernetes_url: {{ kubernetes_url }}
-
-{% if create_clusterRoleBinding  == 'true' %} 
+ 
     rbac:
       create: {{ create_clusterRoleBinding }}
-{% endif %}
-{% if create_serviceAccount  == 'true' %} 
+
     serviceAccount:
       create: {{ create_serviceAccount }}
       name: vault-auth
-{% endif %}
+
