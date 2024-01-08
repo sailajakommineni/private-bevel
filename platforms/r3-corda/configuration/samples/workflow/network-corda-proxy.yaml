@@ -37,11 +37,11 @@ network:
   network_services:
     - service:
       type: doorman
-      uri: "https://doorman.EXTERNAL_URL_SUFFIX"
+      uri: https://doorman.EXTERNAL_URL_SUFFIX
       certificate: USER_DIRECTORY/platforms/r3-corda/configuration/build/corda/doorman/tls/ambassador.crt
     - service:
       type: networkmap
-      uri: "https://networkmap.EXTERNAL_URL_SUFFIX"
+      uri: https://networkmap.EXTERNAL_URL_SUFFIX
       certificate: USER_DIRECTORY/platforms/r3-corda/configuration/build/corda/networkmap/tls/ambassador.crt
   # Allows specification of one or many organizations that will be connecting to a network.
   # If an organization is also hosting the root of the network (e.g. doorman, membership service, etc),
@@ -88,10 +88,10 @@ network:
         jars: 
         - jar:
             # e.g https://maven.pkg.github.com/hyperledger/bevel/com.supplychain.bcc.cordapp-supply-chain/4.9/cordapp-supply-chain-4.9.jar
-            url: "https://maven.pkg.github.com/hyperledger/bevel/com.supplychain.bcc.cordapp-supply-chain/4.9/cordapp-supply-chain-4.9.jar"
+            url: https://maven.pkg.github.com/hyperledger/bevel/com.supplychain.bcc.cordapp-supply-chain/4.9/cordapp-supply-chain-4.9.jar
         - jar:
             # e.g https://maven.pkg.github.com/hyperledger/bevel/com.supplychain.bcc.cordapp-contracts-states/4.9/cordapp-contracts-states-4.9.jar
-            url: "https://maven.pkg.github.com/hyperledger/bevel/com.supplychain.bcc.cordapp-contracts-states/4.9/cordapp-contracts-states-4.9.jar"
+            url: https://maven.pkg.github.com/hyperledger/bevel/com.supplychain.bcc.cordapp-contracts-states/4.9/cordapp-contracts-states-4.9.jar
         username: "GIT_USERNAME"
         password: "GIT_TOKEN"
 
@@ -186,10 +186,10 @@ network:
         jars: 
         - jar:
             # e.g https://maven.pkg.github.com/hyperledger/bevel/com.supplychain.bcc.cordapp-supply-chain/4.9/cordapp-supply-chain-4.9.jar
-            url: "https://maven.pkg.github.com/hyperledger/bevel/com.supplychain.bcc.cordapp-supply-chain/4.9/cordapp-supply-chain-4.9.jar"
+            url: https://maven.pkg.github.com/hyperledger/bevel/com.supplychain.bcc.cordapp-supply-chain/4.9/cordapp-supply-chain-4.9.jar
         - jar:
             # e.g https://maven.pkg.github.com/hyperledger/bevel/com.supplychain.bcc.cordapp-contracts-states/4.9/cordapp-contracts-states-4.9.jar
-            url: "https://maven.pkg.github.com/hyperledger/bevel/com.supplychain.bcc.cordapp-contracts-states/4.9/cordapp-contracts-states-4.9.jar"
+            url: https://maven.pkg.github.com/hyperledger/bevel/com.supplychain.bcc.cordapp-contracts-states/4.9/cordapp-contracts-states-4.9.jar
         username: "GIT_USERNAME"
         password: "GIT_TOKEN"
 
