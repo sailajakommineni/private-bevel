@@ -128,7 +128,8 @@ jobs:
           # Configure Git user settings
           git config --global user.email "${{ env.GIT_EMAIL_ADDR }}"
           git config --global user.name "${{ env.GIT_USER_NAME }}"
-          
+
+
           # Install required tools and Ansible collections
           mkdir -p ~/bin
           export PATH=$PATH:~/bin
