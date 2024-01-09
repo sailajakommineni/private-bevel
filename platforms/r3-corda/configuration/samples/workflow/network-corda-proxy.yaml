@@ -11,7 +11,7 @@ network:
   # Network level configuration specifies the attributes required for each organization
   # to join an existing network.
   type: corda
-  version: "NETWORK_VERSION"
+  version: NETWORK_VERSION
   frontend: enabled   #Flag for frontend to enabled for nodes/peers
   #Environment section for Kubernetes setup
   env:
