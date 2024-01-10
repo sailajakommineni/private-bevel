@@ -80,7 +80,7 @@ jobs:
           # Prepare network configuration file for deployment
           mkdir -p build/
 
-          cp "./platforms/r3-corda/configuration/samples/workflow/network-corda-proxy.yaml" "build/network-corda.yaml"
+          cp "./platforms/r3-corda/configuration/samples/workflow/network-proxy-corda.yaml" "build/network-corda.yaml"
 
           NETWORK_CONF_FILE="build/network-corda.yaml"
           
