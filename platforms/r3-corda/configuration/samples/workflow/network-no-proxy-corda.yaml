@@ -11,16 +11,17 @@ network:
   # Network level configuration specifies the attributes required for each organization
   # to join an existing network.
   type: corda
-  version: 4.9
+  version: NETWORK_VERSION
   frontend: enabled   #Flag for frontend to enabled for nodes/peers
   #Environment section for Kubernetes setup
   env:
-    type: "dev"         # tag for the environment. Important to run multiple flux on single cluster
-    proxy: "none"   # value has to be 'ambassador' as 'haproxy' has not been implemented for Corda
+    type: "FLUX_SUFFIX"         # tag for the environment. Important to run multiple flux on single cluster
+    proxy: "none"
+    proxy_namespace: "ambassador"   # value has to be 'ambassador' as 'haproxy' has not been implemented for Corda
     ambassadorPorts:    # Any additional Ambassador ports can be given here, this is valid only if proxy='ambassador'
       portRange:        # For a range of ports 
-        from: 15010 
-        to: 15020
+        from: PORT_RANGE_FROM 
+        to: PORT_RANGE_TO
     # ports: 15020,15021      # For specific ports
     loadBalancerSourceRanges: '0.0.0.0/0' # comma-separated list without spaces of IP adresses for proxy='ambassador' allowed access
     retry_count: 20                 # Retry count for the checks
@@ -29,19 +30,19 @@ network:
   # Please ensure all required images are built and stored in this registry. 
   # Do not check-in docker_password.
   docker:
-    url: "ghcr.io/hyperledger"
-    username: "docker_username"
-    password: "docker_password"
+    url: "DOCKER_URL"
+    username: "DOCKER_USERNAME"
+    password: "DOCKER_PASSWORD"
   # Remote connection information for doorman and networkmap (will be blank or removed for hosting organization)
   network_services:
     - service:
       type: doorman
-      uri: https://doorman.test.corda.blockchaincloudpoc.com
-      certificate: home_dir/platforms/r3-corda/configuration/build/corda/doorman/tls/ambassador.crt
+      uri: https://doorman.EXTERNAL_URL_SUFFIX
+      certificate: USER_DIRECTORY/platforms/r3-corda/configuration/build/corda/doorman/tls/ambassador.crt
     - service:
       type: networkmap
-      uri: https://networkmap.test.corda.blockchaincloudpoc.com
-      certificate: home_dir/platforms/r3-corda/configuration/build/corda/networkmap/tls/ambassador.crt
+      uri: https://networkmap.EXTERNAL_URL_SUFFIX
+      certificate: USER_DIRECTORY/platforms/r3-corda/configuration/build/corda/networkmap/tls/ambassador.crt
   # Allows specification of one or many organizations that will be connecting to a network.
   # If an organization is also hosting the root of the network (e.g. doorman, membership service, etc),
   # then these services should be listed in this section as well.
@@ -53,34 +54,34 @@ network:
       location: London
       subject: "CN=DLT Root CA,OU=DLT,O=DLT,L=London,C=GB"
       type: doorman-nms-notary
-      external_url_suffix: test.corda.blockchaincloudpoc.com
+      external_url_suffix: "EXTERNAL_URL_SUFFIX"
       cloud_provider: aws   # Options: aws, azure, gcp
       aws:
-        access_key: "aws_access_key"        # AWS Access key, only used when cloud_provider=aws
-        secret_key: "aws_secret_key"        # AWS Secret key, only used when cloud_provider=aws
+        access_key: "AWS_ACCESS_KEY"        # AWS Access key, only used when cloud_provider=aws
+        secret_key: "AWS_SECRET_KEY"        # AWS Secret key, only used when cloud_provider=aws
       # Kubernetes cluster deployment variables. The config file path and name has to be provided in case
       # the cluster has already been created.
       k8s:
-        context: "cluster_context"
-        config_file: "cluster_config"
+        context: "CLUSTER_CONTEXT"
+        config_file: "CLUSTER_CONFIG"
       # Hashicorp Vault server address and root-token. Vault should be unsealed.
       # Do not check-in root_token
       vault:
-        url: "vault_addr"
-        root_token: "vault_root_token"
+        url: "VAULT_ADDR"
+        root_token: "VAULT_ROOT_TOKEN"
       # Git Repo details which will be used by GitOps/Flux.
       # Do not check-in git_access_token
       gitops:
         git_protocol: "https" # Option for git over https or ssh
-        git_url: "https://github.com/<username>/bevel.git"         # Gitops https or ssh url for flux value files 
-        branch: "develop"           # Git branch where release is being made
+        git_url: "https://github.com/GIT_USERNAME/bevel.git"         # Gitops https or ssh url for flux value files 
+        branch: "GIT_BRANCH"           # Git branch where release is being made
         release_dir: "platforms/r3-corda/releases/dev" # Relative Path in the Git repo for flux sync per environment. 
         chart_source: "platforms/r3-corda/charts"     # Relative Path where the Helm charts are stored in Git repo
-        git_repo: "github.com/<username>/bevel.git"   # Gitops git repository URL for git push 
-        username: "git_username"          # Git Service user who has rights to check-in in all branches
-        password: "git_access_token"          # Git Server user password/token (Optional for ssh; Required for https)
-        email: "git@email.com"                # Email to use in git config
-        private_key: "path_to_private_key"          # Path to private key file which has write-access to the git repo (Optional for https; Required for ssh)
+        git_repo: "github.com/GIT_USERNAME/bevel.git"   # Gitops git repository URL for git push 
+        username: "GIT_USERNAME"          # Git Service user who has rights to check-in in all branches
+        password: "GIT_TOKEN"          # Git Server user password/token (Optional for ssh; Required for https)
+        email: "GIT_EMAIL_ADDR"                # Email to use in git config
+        private_key: "PRIVATE_KEY_PATH"          # Path to private key file which has write-access to the git repo (Optional for https; Required for ssh)
 
       # Cordapps Repository details (optional if cordapps jar are store in a repository)
       cordapps:
@@ -91,8 +92,8 @@ network:
         - jar:
             # e.g https://maven.pkg.github.com/hyperledger/bevel/com.supplychain.bcc.cordapp-contracts-states/4.9/cordapp-contracts-states-4.9.jar
             url: https://repo/path/cordapp2.jar
-        username: "git_username"
-        password: "git_access_token"
+        username: "GIT_USERNAME"
+        password: "GIT_TOKEN"
 
       # Services maps to the pods that will be deployed on the k8s cluster
       # This sample has doorman, nms and notary on one cluster but different namespaces
@@ -147,38 +148,38 @@ network:
       location: Zurich
       subject: "O=Manufacturer,OU=Manufacturer,L=Zurich,C=CH"
       type: node
-      external_url_suffix: test.corda.blockchaincloudpoc.com
+      external_url_suffix: "EXTERNAL_URL_SUFFIX"
       
       cloud_provider: aws   # Options: aws, azure, gcp
       aws:
-        access_key: "aws_access_key"        # AWS Access key, only used when cloud_provider=aws
-        secret_key: "aws_secret_key"        # AWS Secret key, only used when cloud_provider=aws
+        access_key: "AWS_ACCESS_KEY"        # AWS Access key, only used when cloud_provider=aws
+        secret_key: "AWS_SECRET_KEY"        # AWS Secret key, only used when cloud_provider=aws
   
       # Kubernetes cluster deployment variables. The config file path and name has to be provided in case
       # the cluster has already been created.
       k8s:
-        context: "cluster_context"
-        config_file: "cluster_config"
+        context: "CLUSTER_CONTEXT"
+        config_file: "CLUSTER_CONFIG"
 
       # Hashicorp Vault server address and root-token. Vault should be unsealed.
       # Do not check-in root_token
       vault:
-        url: "vault_addr"
-        root_token: "vault_root_token"
+        url: "VAULT_ADDR"
+        root_token: "VAULT_ROOT_TOKEN"
         
       # Git Repo details which will be used by GitOps/Flux.
       # Do not check-in git_access_token
       gitops:
         git_protocol: "https" # Option for git over https or ssh
-        git_url: "https://github.com/<username>/bevel.git"         # Gitops https or ssh url for flux value files 
-        branch: "develop"           # Git branch where release is being made
+        git_url: "https://github.com/GIT_USERNAME/bevel.git"         # Gitops https or ssh url for flux value files 
+        branch: "GIT_BRANCH"           # Git branch where release is being made
         release_dir: "platforms/r3-corda/releases/dev" # Relative Path in the Git repo for flux sync per environment. 
         chart_source: "platforms/r3-corda/charts"     # Relative Path where the Helm charts are stored in Git repo
-        git_repo: "github.com/<username>/bevel.git"   # Gitops git repository URL for git push 
-        username: "git_username"          # Git Service user who has rights to check-in in all branches
-        password: "git_access_token"          # Git Server user password/token (Optional for ssh; Required for https)
-        email: "git@email.com"                # Email to use in git config
-        private_key: "path_to_private_key"          # Path to private key file which has write-access to the git repo (Optional for https; Required for ssh)
+        git_repo: "github.com/GIT_USERNAME/bevel.git"   # Gitops git repository URL for git push 
+        username: "GIT_USERNAME"          # Git Service user who has rights to check-in in all branches
+        password: "GIT_TOKEN"          # Git Server user password/token (Optional for ssh; Required for https)
+        email: "GIT_EMAIL_ADDR"                # Email to use in git config
+        private_key: "PRIVATE_KEY_PATH"          # Path to private key file which has write-access to the git repo (Optional for https; Required for ssh)
       
       # Cordapps Repository details (optional if cordapps jar are store in a repository)
       cordapps:
@@ -189,8 +190,8 @@ network:
         - jar:
             # e.g https://maven.pkg.github.com/hyperledger/bevel/com.supplychain.bcc.cordapp-contracts-states/4.9/cordapp-contracts-states-4.9.jar
             url: "https://repo/path/cordapp2.jar"
-        username: "git_username"
-        password: "git_access_token"
+        username: "GIT_USERNAME"
+        password: "GIT_TOKEN"
 
       # The participating nodes are named as peers 
       services:
@@ -229,38 +230,38 @@ network:
       location: London
       subject: "O=Carrier,OU=Carrier,L=London,C=GB"
       type: node
-      external_url_suffix: test.corda.blockchaincloudpoc.com
+      external_url_suffix: "EXTERNAL_URL_SUFFIX"
       
       cloud_provider: aws   # Options: aws, azure, gcp
       aws:
-        access_key: "aws_access_key"        # AWS Access key, only used when cloud_provider=aws
-        secret_key: "aws_secret_key"        # AWS Secret key, only used when cloud_provider=aws
+        access_key: "AWS_ACCESS_KEY"        # AWS Access key, only used when cloud_provider=aws
+        secret_key: "AWS_SECRET_KEY"        # AWS Secret key, only used when cloud_provider=aws
   
       # Kubernetes cluster deployment variables. The config file path and name has to be provided in case
       # the cluster has already been created.
       k8s:
-        context: "cluster_context"
-        config_file: "cluster_config"
+        context: "CLUSTER_CONTEXT"
+        config_file: "CLUSTER_CONFIG"
 
       # Hashicorp Vault server address and root-token. Vault should be unsealed.
       # Do not check-in root_token
       vault:
-        url: "vault_addr"
-        root_token: "vault_root_token"
+        url: "VAULT_ADDR"
+        root_token: "VAULT_ROOT_TOKEN"
         
       # Git Repo details which will be used by GitOps/Flux.
       # Do not check-in git_access_token
       gitops:
         git_protocol: "https" # Option for git over https or ssh
-        git_url: "https://github.com/<username>/bevel.git"         # Gitops https or ssh url for flux value files 
-        branch: "develop"           # Git branch where release is being made
+        git_url: "https://github.com/GIT_USERNAME/bevel.git"         # Gitops https or ssh url for flux value files 
+        branch: "GIT_BRANCH"           # Git branch where release is being made
         release_dir: "platforms/r3-corda/releases/dev" # Relative Path in the Git repo for flux sync per environment. 
         chart_source: "platforms/r3-corda/charts"     # Relative Path where the Helm charts are stored in Git repo
-        git_repo: "github.com/<username>/bevel.git"   # Gitops git repository URL for git push 
-        username: "git_username"          # Git Service user who has rights to check-in in all branches
-        password: "git_access_token"          # Git Server user password/token (Optional for ssh; Required for https)
-        email: "git@email.com"                # Email to use in git config
-        private_key: "path_to_private_key"          # Path to private key file which has write-access to the git repo (Optional for https; Required for ssh)
+        git_repo: "github.com/GIT_USERNAME/bevel.git"   # Gitops git repository URL for git push 
+        username: "GIT_USERNAME"          # Git Service user who has rights to check-in in all branches
+        password: "GIT_TOKEN"          # Git Server user password/token (Optional for ssh; Required for https)
+        email: "GIT_EMAIL_ADDR"                # Email to use in git config
+        private_key: "PRIVATE_KEY_PATH"          # Path to private key file which has write-access to the git repo (Optional for https; Required for ssh)
       
       # Cordapps Repository details (optional if cordapps jar are store in a repository)
       cordapps:
@@ -271,8 +272,8 @@ network:
         - jar:
             # e.g https://maven.pkg.github.com/hyperledger/bevel/com.supplychain.bcc.cordapp-contracts-states/4.9/cordapp-contracts-states-4.9.jar
             url: "https://repo/path/cordapp2.jar"
-        username: "git_username"
-        password: "git_access_token"
+        username: "GIT_USERNAME"
+        password: "GIT_TOKEN"
       
       services:
         peers:
@@ -310,38 +311,38 @@ network:
       location: New York
       subject: "O=Store,OU=Store,L=New York,C=US"
       type: node
-      external_url_suffix: test.corda.blockchaincloudpoc.com
+      external_url_suffix: "EXTERNAL_URL_SUFFIX"
       
       cloud_provider: aws   # Options: aws, azure, gcp
       aws:
-        access_key: "aws_access_key"        # AWS Access key, only used when cloud_provider=aws
-        secret_key: "aws_secret_key"        # AWS Secret key, only used when cloud_provider=aws
+        access_key: "AWS_ACCESS_KEY"        # AWS Access key, only used when cloud_provider=aws
+        secret_key: "AWS_SECRET_KEY"        # AWS Secret key, only used when cloud_provider=aws
   
       # Kubernetes cluster deployment variables. The config file path and name has to be provided in case
       # the cluster has already been created.
       k8s:
-        context: "cluster_context"
-        config_file: "cluster_config"
+        context: "CLUSTER_CONTEXT"
+        config_file: "CLUSTER_CONFIG"
 
       # Hashicorp Vault server address and root-token. Vault should be unsealed.
       # Do not check-in root_token
       vault:
-        url: "vault_addr"
-        root_token: "vault_root_token"
+        url: "VAULT_ADDR"
+        root_token: "VAULT_ROOT_TOKEN"
         
       # Git Repo details which will be used by GitOps/Flux.
       # Do not check-in git_access_token
       gitops:
         git_protocol: "https" # Option for git over https or ssh
-        git_url: "https://github.com/<username>/bevel.git"         # Gitops https or ssh url for flux value files 
-        branch: "develop"           # Git branch where release is being made
+        git_url: "https://github.com/GIT_USERNAME/bevel.git"         # Gitops https or ssh url for flux value files 
+        branch: "GIT_BRANCH"           # Git branch where release is being made
         release_dir: "platforms/r3-corda/releases/dev" # Relative Path in the Git repo for flux sync per environment. 
         chart_source: "platforms/r3-corda/charts"     # Relative Path where the Helm charts are stored in Git repo
-        git_repo: "github.com/<username>/bevel.git"   # Gitops git repository URL for git push 
-        username: "git_username"          # Git Service user who has rights to check-in in all branches
-        password: "git_access_token"          # Git Server user password/token (Optional for ssh; Required for https)
-        email: "git@email.com"                # Email to use in git config
-        private_key: "path_to_private_key"          # Path to private key file which has write-access to the git repo (Optional for https; Required for ssh)
+        git_repo: "github.com/GIT_USERNAME/bevel.git"   # Gitops git repository URL for git push 
+        username: "GIT_USERNAME"          # Git Service user who has rights to check-in in all branches
+        password: "GIT_TOKEN"          # Git Server user password/token (Optional for ssh; Required for https)
+        email: "GIT_EMAIL_ADDR"                # Email to use in git config
+        private_key: "PRIVATE_KEY_PATH"          # Path to private key file which has write-access to the git repo (Optional for https; Required for ssh)
 
       # Cordapps Repository details (optional if cordapps jar are store in a repository)
       cordapps:
@@ -352,8 +353,8 @@ network:
         - jar:
             # e.g https://maven.pkg.github.com/hyperledger/bevel/com.supplychain.bcc.cordapp-contracts-states/4.9/cordapp-contracts-states-4.9.jar
             url: "https://repo/path/cordapp2.jar"
-        username: "git_username"
-        password: "git_access_token"
+        username: "GIT_USERNAME"
+        password: "GIT_TOKEN"
 
       services:
         peers:
@@ -391,38 +392,38 @@ network:
       location: Boston
       subject: "O=Warehouse,OU=Warehouse,L=Boston,C=US"
       type: node
-      external_url_suffix: test.corda.blockchaincloudpoc.com
+      external_url_suffix: "EXTERNAL_URL_SUFFIX"
       
       cloud_provider: aws   # Options: aws, azure, gcp
       aws:
-        access_key: "aws_access_key"        # AWS Access key, only used when cloud_provider=aws
-        secret_key: "aws_secret_key"        # AWS Secret key, only used when cloud_provider=aws
+        access_key: "AWS_ACCESS_KEY"        # AWS Access key, only used when cloud_provider=aws
+        secret_key: "AWS_SECRET_KEY"        # AWS Secret key, only used when cloud_provider=aws
   
       # Kubernetes cluster deployment variables. The config file path and name has to be provided in case
       # the cluster has already been created.
       k8s:
-        context: "cluster_context"
-        config_file: "cluster_config"
+        context: "CLUSTER_CONTEXT"
+        config_file: "CLUSTER_CONFIG"
 
       # Hashicorp Vault server address and root-token. Vault should be unsealed.
       # Do not check-in root_token
       vault:
-        url: "vault_addr"
-        root_token: "vault_root_token"
+        url: "VAULT_ADDR"
+        root_token: "VAULT_ROOT_TOKEN"
         
       # Git Repo details which will be used by GitOps/Flux.
       # Do not check-in git_access_token
       gitops:
         git_protocol: "https" # Option for git over https or ssh
-        git_url: "https://github.com/<username>/bevel.git"         # Gitops https or ssh url for flux value files 
-        branch: "develop"           # Git branch where release is being made
+        git_url: "https://github.com/GIT_USERNAME/bevel.git"         # Gitops https or ssh url for flux value files 
+        branch: "GIT_BRANCH"           # Git branch where release is being made
         release_dir: "platforms/r3-corda/releases/dev" # Relative Path in the Git repo for flux sync per environment. 
         chart_source: "platforms/r3-corda/charts"     # Relative Path where the Helm charts are stored in Git repo
-        git_repo: "github.com/<username>/bevel.git"   # Gitops git repository URL for git push 
-        username: "git_username"          # Git Service user who has rights to check-in in all branches
-        password: "git_access_token"          # Git Server user password/token (Optional for ssh; Required for https)
-        email: "git@email.com"                # Email to use in git config
-        private_key: "path_to_private_key"          # Path to private key file which has write-access to the git repo (Optional for https; Required for ssh)
+        git_repo: "github.com/GIT_USERNAME/bevel.git"   # Gitops git repository URL for git push 
+        username: "GIT_USERNAME"          # Git Service user who has rights to check-in in all branches
+        password: "GIT_TOKEN"          # Git Server user password/token (Optional for ssh; Required for https)
+        email: "GIT_EMAIL_ADDR"                # Email to use in git config
+        private_key: "PRIVATE_KEY_PATH"          # Path to private key file which has write-access to the git repo (Optional for https; Required for ssh)
       
       # Cordapps Repository details (optional if cordapps jar are store in a repository)
       cordapps:
@@ -433,8 +434,8 @@ network:
         - jar:
             # e.g https://maven.pkg.github.com/hyperledger/bevel/com.supplychain.bcc.cordapp-contracts-states/4.9/cordapp-contracts-states-4.9.jar
             url: "https://repo/path/cordapp2.jar"
-        username: "git_username"
-        password: "git_access_token"
+        username: "GIT_USERNAME"
+        password: "GIT_TOKEN"
         
       services:
         peers:

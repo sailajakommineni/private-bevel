@@ -16,7 +16,8 @@ network:
   #Environment section for Kubernetes setup
   env:
     type: "dev"         # tag for the environment. Important to run multiple flux on single cluster
-    proxy: ambassador   # value has to be 'ambassador' as 'haproxy' has not been implemented for Corda
+    proxy: ambassador
+    proxy_namespace: ambassador   # value has to be 'ambassador' as 'haproxy' has not been implemented for Corda
     ambassadorPorts:    # Any additional Ambassador ports can be given here, this is valid only if proxy='ambassador'
       portRange:        # For a range of ports 
         from: 15010 
