@@ -42,7 +42,7 @@ network:
 
   # Prometheus setup section
   prometheus:
-    enabled: true                   # Set to "true" to enable Prometheus monitoring, or "false" to disable it.
+    enabled: false                   # Set to "true" to enable Prometheus monitoring, or "false" to disable it.
     ambassador_mapping: enabled     # Choose "enabled" to make Prometheus publically accessible through Ambassador, or "disabled" to restrict access to local use via port-forwarding.
     prometheus_prefix: bevelprom    # The prefix added to the organization's external_url_suffix to create the hostname.
     port: 80                        # The port will be used by Ambassador for Prometheus. Supported values include 80, 443, or any unused port from the network.env.ambassadorPorts range.
@@ -60,7 +60,7 @@ network:
 
   # Following are the configurations for the common Besu network
   config:
-    consensus: "ibft"                 # Options are "ibft2", "qbft", "ibft" and "clique".
+    consensus: "qbft"                 # Options are "ibft2", "qbft", "ibft" and "clique".
     ## Certificate subject for the root CA of the network.
     #  This is for development usage only where we create self-signed certificates and the truststores are generated automatically.
     #  Production systems should generate proper certificates and configure truststores accordingly.
