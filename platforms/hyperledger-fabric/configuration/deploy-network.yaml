@@ -41,7 +41,6 @@
         name: "{{ playbook_dir }}/../../shared/configuration/roles/setup/scripts"
       vars:
         namespace: "{{ org.name | lower }}-net"
-        network_type: "{{ network.type | lower }}"
         kubernetes: "{{ org.k8s }}"
       loop: "{{ network['organizations'] }}"
       loop_control:
@@ -56,10 +55,9 @@
         component_name: "{{ org.name | lower }}-vaultk8s-job"
         component_type: "{{ org.type | lower }}"
         component_ns: "{{ org.name | lower }}-net"
-        component_auth: "{{ network.env.type }}{{ org.name | lower }}-net-auth"
+        component_auth: "{{ network.env.type }}{{ name }}"
         kubernetes: "{{ org.k8s }}"
         vault: "{{ org.vault }}"
-        policy_type: "fabric"
         gitops: "{{ org.gitops }}"
       loop: "{{ network['organizations'] }}"
       loop_control:
@@ -75,10 +73,9 @@
         component_name: "{{ org.name | lower }}-vaultk8s-job"
         component_type: "{{ org.type | lower }}"
         component_ns: "{{ org.name | lower }}-net"
-        component_auth: "{{ org.k8s.cluster_id }}{{ component_ns }}-auth"
+        component_auth: "{{ network.env.type }}{{ name }}"
         kubernetes: "{{ org.k8s }}"
         vault: "{{ org.vault }}"
-        policy_type: "fabric"
         gitops: "{{ org.gitops }}"
         reset_path: "platforms/hyperledger-fabric/configuration"
       loop: "{{ network['organizations'] }}"
