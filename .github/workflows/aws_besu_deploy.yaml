@@ -149,4 +149,4 @@ jobs:
           ansible-playbook platforms/shared/configuration/site.yaml \
             -i platforms/shared/inventory/ansible_provisioners \
             -e @build/network-besu.yaml \
-            -e 'ansible_python_interpreter=/usr/bin/python3'
+            -e 'ansible_python_interpreter=/usr/bin/python3' -e "reset=true"
