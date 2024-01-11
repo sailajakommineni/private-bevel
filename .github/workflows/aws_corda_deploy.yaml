@@ -141,7 +141,6 @@ jobs:
           git config --global user.email "${{ env.GIT_EMAIL_ADDR }}"
           git config --global user.name "${{ env.GIT_USER_NAME }}"
 
-
           # Install required tools and Ansible collections
           mkdir -p ~/bin
           export PATH=$PATH:~/bin
@@ -153,4 +152,4 @@ jobs:
           ansible-playbook platforms/shared/configuration/site.yaml \
             -i platforms/shared/inventory/ansible_provisioners \
             -e @build/network-corda.yaml \
-            -e 'ansible_python_interpreter=/usr/bin/python3' #-e "reset=true"
+            -e 'ansible_python_interpreter=/usr/bin/python3' -e "reset=true"
