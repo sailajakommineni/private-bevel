@@ -24,12 +24,24 @@ name: Deploy BESU to an EKS Cluster
 
 # Triggers for the workflow
 on:
-  # Manually trigger the workflow through the GitHub Actions UI
-  workflow_dispatch:
+  push:
+    branches:
+    - 'new_feature-2416'   #name of the branch
+    # Ignore certain paths to avoid unnecessary triggering
     paths-ignore:
       - 'docs/**'
       - '**/charts/**'
       - '**/releases/**'
+  # Manually trigger the workflow through the GitHub Actions UI
+  workflow_dispatch:
+
+# on:
+#   # Manually trigger the workflow through the GitHub Actions UI
+#   workflow_dispatch:
+#     paths-ignore:
+#       - 'docs/**'
+#       - '**/charts/**'
+#       - '**/releases/**'
 
 # Jobs to be executed
 jobs:
@@ -76,7 +88,7 @@ jobs:
           # Prepare network configuration file for deployment
           mkdir -p build/
 
-          cp "./platforms/hyperledger-besu/configuration/samples/workflow/network-proxy-besu.yaml" "build/network-besu.yaml"
+          cp "./platforms/hyperledger-besu/configuration/samples/network-besu.yaml" "build/network-besu.yaml"
 
           NETWORK_CONF_FILE="build/network-besu.yaml"
           
