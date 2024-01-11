@@ -1,13 +1,14 @@
 ---
 name: spell check
 on:
-  push:
-    branches:
-    - "**"
-  pull_request:
-    paths:
-      - 'docs/*.md'
-    types: [opened, edited, synchronize, reopened]
+  workflow_dispatch:
+  # push:
+  #   branches:
+  #   - "**"
+  # pull_request:
+  #   paths:
+  #     - 'docs/*.md'
+  #   types: [opened, edited, synchronize, reopened]
 
 env:
   SPELL_CHECK_DISABLED: false

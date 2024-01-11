@@ -26,7 +26,7 @@ name: Deploy BESU to an EKS Cluster
 on:
   push:
     branches:
-    - 'new_feature-2416'   #name of the branch
+    - 'workflowtesting'   #name of the branch
     # Ignore certain paths to avoid unnecessary triggering
     paths-ignore:
       - 'docs/**'
