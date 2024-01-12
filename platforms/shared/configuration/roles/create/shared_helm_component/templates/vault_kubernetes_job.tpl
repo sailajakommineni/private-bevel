@@ -39,8 +39,3 @@ spec:
       k8s:
         kubernetes_url: {{ kubernetes_url }}
  
-      
-
-      serviceAccount:
-        create: {{ create_serviceAccount }}
-        name: vault-auth
