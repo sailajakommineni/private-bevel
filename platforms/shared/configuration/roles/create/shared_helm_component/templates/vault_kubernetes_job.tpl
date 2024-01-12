@@ -35,3 +35,13 @@ spec:
       repository: ghcr.io/hyperledger/bevel-alpine
       tag: latest
       pullSecret: "regcred"
+
+      k8s:
+        kubernetes_url: {{ kubernetes_url }}
+ 
+      rbac:
+        create: {{ create_clusterRoleBinding }}
+
+      serviceAccount:
+        create: {{ create_serviceAccount }}
+        name: vault-auth
