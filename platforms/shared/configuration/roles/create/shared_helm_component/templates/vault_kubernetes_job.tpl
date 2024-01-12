@@ -17,6 +17,7 @@ spec:
       namespace: flux-{{ network.env.type }}
   values:
     global:
+      nameOverride: {{ component_name }}
       serviceAccountName: vault-auth
       cluster:
         cloudNativeServices: false
