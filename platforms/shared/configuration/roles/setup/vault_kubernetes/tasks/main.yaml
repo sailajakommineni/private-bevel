@@ -47,12 +47,12 @@
 
 #############################################################################################
 
-# This task creates the access policy for various entity
-- name: Create policy for Access Control
-  template:
-    src: "{{ policy_templates[policy_type] | default('helm_component.tpl') }}"
-    dest: "{{ playbook_dir }}/build/vault-crypto-{{ component_type }}-{{ name }}-ro.hcl"
-  changed_when: false
+# # This task creates the access policy for various entity
+# - name: Create policy for Access Control
+#   template:
+#     src: "{{ policy_templates[policy_type] | default('helm_component.tpl') }}"
+#     dest: "{{ playbook_dir }}/build/vault-crypto-{{ component_type }}-{{ name }}-ro.hcl"
+#   changed_when: false
   
 #############################################################################################
 # This tasks gets the kubernetes server url
