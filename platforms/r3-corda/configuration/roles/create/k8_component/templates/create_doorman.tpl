@@ -1,12 +1,12 @@
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
-  name: {{ services.doorman.name }}
+  name: {{ component_name }}
   annotations:
     fluxcd.io/automated: "false"
   namespace: {{ component_ns }}
 spec:
-  releaseName: {{ services.doorman.name }}
+  releaseName: {{ component_name }}
   interval: 1m
   chart:
     spec:
@@ -16,7 +16,7 @@ spec:
         name: flux-{{ network.env.type }}
         namespace: flux-{{ network.env.type }}
   values:
-    nodeName: {{ services.doorman.name }}
+    nodeName: {{ component_name }}
     metadata:
       namespace: {{component_ns }}
     image:
@@ -34,13 +34,13 @@ spec:
       - name: DOORMAN_AUTH_USERNAME
         value: sa
       - name: DB_URL
-        value: mongodb-{{ services.doorman.name }}
+        value: mongodb-{{ component_name }}
       - name: DB_PORT
         value: 27017
       - name: DATABASE
         value: admin
       - name: DB_USERNAME
-        value: {{ services.doorman.name }}
+        value: {{ component_name }}
 {% if network.docker.username is defined %}
       imagePullSecret: regcred
 {% endif %}
@@ -58,15 +58,15 @@ spec:
       role: vault-role
       authpath: {{ component_auth }}
       serviceaccountname: vault-auth
-      certsecretprefix: {{ services.doorman.name }}/data/certs
-      dbcredsecretprefix: {{ services.doorman.name }}/data/credentials/mongodb
-      secretdoormanpass: {{ services.doorman.name }}/data/credentials/userpassword
-      tlscertsecretprefix: {{ services.doorman.name }}/data/tlscerts
+      certsecretprefix: {{ component_name }}/data/certs
+      dbcredsecretprefix: {{ component_name }}/data/credentials/mongodb
+      secretdoormanpass: {{ component_name }}/data/credentials/userpassword
+      tlscertsecretprefix: {{ component_name }}/data/tlscerts
       dbcertsecretprefix: {{ component_name }}/data/certs
     healthcheck:
       readinesscheckinterval: 10
       readinessthreshold: 15
-      dburl: mongodb-{{ services.doorman.name }}:27017
+      dburl: mongodb-{{ component_name }}:27017
     service:
       port: {{ services.doorman.ports.servicePort }}
       targetPort: {{ services.doorman.ports.targetPort }}
