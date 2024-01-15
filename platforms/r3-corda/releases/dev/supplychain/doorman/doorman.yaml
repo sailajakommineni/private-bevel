@@ -1,0 +1,78 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: doorman
+  annotations:
+    fluxcd.io/automated: "false"
+  namespace: supplychain-ns
+spec:
+  releaseName: doorman
+  interval: 1m
+  chart:
+    spec:
+      chart: platforms/r3-corda/charts/corda-doorman-tls
+      sourceRef:
+        kind: GitRepository
+        name: flux-dev
+        namespace: flux-dev
+  values:
+    nodeName: doorman
+    metadata:
+      namespace: supplychain-ns
+    image:
+      authusername: sa
+      containerName: ghcr.io/hyperledger/bevel-doorman-linuxkit:latest
+      env:
+      - name: DOORMAN_PORT
+        value: 8080
+      - name: DOORMAN_ROOT_CA_NAME
+        value: CN=Corda Doorman CA,OU=DLT,O=DLT,L=Berlin,C=DE
+      - name: DOORMAN_TLS
+        value: true
+      - name: DOORMAN_DB
+        value: /opt/doorman/db
+      - name: DOORMAN_AUTH_USERNAME
+        value: sa
+      - name: DB_URL
+        value: mongodb-doorman
+      - name: DB_PORT
+        value: 27017
+      - name: DATABASE
+        value: admin
+      - name: DB_USERNAME
+        value: doorman
+      imagePullSecret: regcred
+      tlsCertificate: true
+      initContainerName: ghcr.io/hyperledger/alpine-utils:1.0
+      mountPath:
+        basePath: /opt/doorman
+    storage:
+      memory: 512Mi
+      name: supplychain-aws-storageclass
+    mountPath:
+      basePath: /opt/doorman
+    vault:
+      address: http://vault.internal.dev.aws.blockchaincloudpoc-develop.com:20002
+      role: vault-role
+      authpath: cordadoorman
+      serviceaccountname: vault-auth
+      certsecretprefix: doorman/data/certs
+      dbcredsecretprefix: doorman/data/credentials/mongodb
+      secretdoormanpass: doorman/data/credentials/userpassword
+      tlscertsecretprefix: doorman/data/tlscerts
+      dbcertsecretprefix: doorman/data/certs
+    healthcheck:
+      readinesscheckinterval: 10
+      readinessthreshold: 15
+      dburl: mongodb-doorman:27017
+    service:
+      port: 8080
+      targetPort: 8080
+      type: ClusterIP
+      annotations: {}
+    deployment:
+      annotations: {}
+    pvc:
+      annotations: {}
+    ambassador:
+      external_url_suffix: sai29.dev.aws.blockchaincloudpoc-develop.com
