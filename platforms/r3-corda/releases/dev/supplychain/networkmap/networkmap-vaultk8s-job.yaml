@@ -1,0 +1,41 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: networkmap-vaultk8s-job
+  namespace: supplychain-ns
+  annotations:
+    fluxcd.io/automated: "false"
+spec:
+  releaseName: networkmap-vaultk8s-job
+  interval: 1m
+  chart:
+   spec:
+    chart: platforms/shared/charts/bevel-vault-mgmt
+    sourceRef:
+      kind: GitRepository
+      name: flux-dev
+      namespace: flux-dev
+  values:
+    global:
+      nameOverride: networkmap-vaultk8s-job
+      serviceAccountName: vault-auth
+      cluster:
+        cloudNativeServices: false
+        kubernetesUrl: https://300125A3D09FFA0A178EC3522C96BBB8.gr7.eu-west-1.eks.amazonaws.com
+      vault:
+        type: hashicorp
+        role: vault-role
+        address: http://vault.internal.dev.aws.blockchaincloudpoc-develop.com:20002
+        authPath: devnetworkmap
+        network: corda
+        secretEngine: networkmap
+        secretPrefix: "data/networkmap"
+        tls:
+    image:
+      repository: ghcr.io/hyperledger/bevel-alpine
+      tag: latest
+      pullSecret: "regcred"
+
+      k8s:
+        kubernetes_url: https://300125A3D09FFA0A178EC3522C96BBB8.gr7.eu-west-1.eks.amazonaws.com
+ 
