@@ -151,7 +151,7 @@
 # Checking root certificates for mongodb
 - name: Check if mongoroot certs already created
   shell: |
-    vault kv get -field=mongoCA.crt  {{ component_name }}/certs > {{ mongorootca }}/tempmongoCA.crt
+    vault kv get -field=mongoCA.crt  {{ component_name }}/{{ component_name }}/certs > {{ mongorootca }}/tempmongoCA.crt
   environment:
     VAULT_ADDR: "{{ vault.url }}"
     VAULT_TOKEN: "{{ vault.root_token }}"
@@ -178,7 +178,7 @@
 # checking if mongodb certificate already created
 - name: Check if mongodb certs already created
   shell: |
-    vault kv get -field=mongodb-{{component_name}}.pem  {{ component_name }}/certs > {{ mongodbca }}/tempmongodb-{{component_name}}.pem
+    vault kv get -field=mongodb-{{component_name}}.pem  {{ component_name }}/{{ component_name }}/certs > {{ mongodbca }}/tempmongodb-{{component_name}}.pem
   environment:
     VAULT_ADDR: "{{ vault.url }}"
     VAULT_TOKEN: "{{ vault.root_token }}"
@@ -206,7 +206,7 @@
 # Putting certs to vault for root
 - name: Putting certs to vault for root
   shell: |
-    vault kv put {{ component_name }}/certs rootcakey="$(cat {{ rootca }}/keys.jks | base64)" cacerts="$(cat {{ rootca }}/cordarootca.pem | base64)" keystore="$(cat {{ rootca }}/cordarootca.key | base64)"
+    vault kv put {{ component_name }}/{{ component_name }}/certs rootcakey="$(cat {{ rootca }}/keys.jks | base64)" cacerts="$(cat {{ rootca }}/cordarootca.pem | base64)" keystore="$(cat {{ rootca }}/cordarootca.key | base64)"
   environment:
     VAULT_ADDR: "{{ vault.url }}"
     VAULT_TOKEN: "{{ vault.root_token }}"
