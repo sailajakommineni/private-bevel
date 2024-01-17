@@ -35,7 +35,7 @@
     vars:
       org_name: "{{ org.name | lower }}"
       cloudProvider: "{{ org.cloud_provider | lower }}"
-      sc_name: "{{ org_name }}-{{ cloudProvider }}-storageclass" 
+      sc_name: "{{ org_name }}-{{ cloudProvider }}-storageclass"  #"{{ org_name }}-bevel-storageclass"
       region: "{{ org.k8s.region | default('eu-west-1') }}"
       git_dir: "{{ org.gitops.release_dir }}"
       kubernetes: "{{ org.k8s }}"
