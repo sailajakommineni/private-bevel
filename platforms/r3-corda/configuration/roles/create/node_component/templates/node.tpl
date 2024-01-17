@@ -132,12 +132,12 @@ spec:
       role: vault-role
       authpath: corda{{ component_name }}
       serviceaccountname: vault-auth
-      dbsecretprefix: {{ component_name }}/data/credentials/database
-      rpcusersecretprefix: {{ component_name }}/data/credentials/rpcusers
-      keystoresecretprefix: {{ component_name }}/data/credentials/keystore
-      certsecretprefix: {{ component_name }}/data/certs
-      networkmapsecretprefix: {{ component_name }}/data/credentials/networkmappassword
-      cordappsreposecretprefix: {{ component_name }}/data/credentials/cordapps
+      dbsecretprefix: {{ component_name }}/data/{{ component_name }}/credentials/database
+      rpcusersecretprefix: {{ component_name }}/data/{{ component_name }}/credentials/rpcusers
+      keystoresecretprefix: {{ component_name }}/data/{{ component_name }}/credentials/keystore
+      certsecretprefix: {{ component_name }}/data/{{ component_name }}/certs
+      networkmapsecretprefix: {{ component_name }}/data/{{ component_name }}/credentials/networkmappassword
+      cordappsreposecretprefix: {{ component_name }}/data/{{ component_name }}/credentials/cordapps
       retries: 10
 
           

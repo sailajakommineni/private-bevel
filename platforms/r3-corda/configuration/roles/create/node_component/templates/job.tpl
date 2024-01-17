@@ -110,10 +110,10 @@ spec:
       role: vault-role
       authpath: corda{{ component_name }}
       serviceaccountname: vault-auth
-      dbsecretprefix: {{ component_name }}/data/credentials/database
-      rpcusersecretprefix: {{ component_name }}/data/credentials/rpcusers
-      keystoresecretprefix: {{ component_name }}/data/credentials/keystore
-      certsecretprefix: {{ component_name }}/data/certs
+      dbsecretprefix: {{ component_name }}/data/{{ component_name }}/credentials/database
+      rpcusersecretprefix: {{ component_name }}/data/{{ component_name }}/credentials/rpcusers
+      keystoresecretprefix: {{ component_name }}/data/{{ component_name }}/credentials/keystore
+      certsecretprefix: {{ component_name }}/data/{{ component_name }}/certs
       retries: 10
         
     healthcheck:
